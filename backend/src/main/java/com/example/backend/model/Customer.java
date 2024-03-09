@@ -15,6 +15,9 @@ public class Customer {
     @Column(name = "last_name")
     private String lastName;
 
+    @Column(name = "test_value")
+    private String testValue;
+
     public Long getId() {
         return id;
     }
@@ -37,5 +40,13 @@ public class Customer {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+
+    public String getTestValue() {
+        return testValue;
+    }
+
+    public void setTestValue(String testValue) {
+        this.testValue = testValue;
     }
 }
