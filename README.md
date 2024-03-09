@@ -1,3 +1,3 @@
 # Car Rent
 
-Car rent application. 
+Car rent application with Docker. 
