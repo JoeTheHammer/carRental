@@ -3,7 +3,6 @@ import reactLogo from "./assets/react.svg";
 import viteLogo from "/vite.svg";
 import "./App.css";
 
-// Define the interface for your customer object
 interface Customer {
   firstName: string;
   lastName: string;
@@ -12,7 +11,6 @@ interface Customer {
 
 function App() {
   const [count, setCount] = useState(0);
-  // Use the Customer interface for the customers state
   const [customers, setCustomers] = useState<Customer[]>([]);
 
   useEffect(() => {
