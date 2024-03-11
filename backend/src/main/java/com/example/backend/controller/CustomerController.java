@@ -3,22 +3,22 @@ package com.example.backend.controller;
 import com.example.backend.dto.CustomerDTO;
 import com.example.backend.model.Customer;
 import com.example.backend.service.CustomerService;
+import com.example.backend.service.ICustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/customer")
 public class CustomerController {
 
-    private final CustomerService customerService;
+    private final ICustomerService customerService;
 
     @Autowired
     public CustomerController(CustomerService customerService) {
@@ -29,10 +29,30 @@ public class CustomerController {
     @CrossOrigin(origins = "http://localhost:5173")
     public List<CustomerDTO> getAllCustomers(){
         List<CustomerDTO> customerDTOList = new ArrayList<>();
-        for (Customer customer : customerService.findAll()){
+        for (Customer customer : this.customerService.findAll()){
             customerDTOList.add(new CustomerDTO(customer));
         }
         return customerDTOList;
     }
+
+    @GetMapping(value = "/getCustomer/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @CrossOrigin(origins = "http://localhost:5173")
+    public CustomerDTO getCustomerById(@PathVariable("id") Long id) {
+        return new CustomerDTO(this.getCustomerFromId(id, "Customer " + id + " not found!"));
+    }
+
+    @DeleteMapping("/deleteCustomer/{id}")
+    @CrossOrigin(origins = "http://localhost:5173")
+    public void deleteCustomerById(@PathVariable("id") Long id) {
+        customerService.delete(this.getCustomerFromId(id,
+                "Customer " + id + " cannot be deleted because it was not found!"));
+    }
+
+    private Customer getCustomerFromId(Long id, String errorMessage){
+        return this.customerService.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, errorMessage));
+    }
+
+
 
 }
