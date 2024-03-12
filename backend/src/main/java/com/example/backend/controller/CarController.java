@@ -2,7 +2,6 @@ package com.example.backend.controller;
 
 import com.example.backend.dto.CarDTO;
 import com.example.backend.model.Car;
-import com.example.backend.model.Customer;
 import com.example.backend.service.ICarService;
 import com.example.backend.service.CarService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +12,6 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/car")
