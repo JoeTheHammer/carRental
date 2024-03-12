@@ -1,5 +1,7 @@
 package com.example.backend.model;
 
+import com.example.backend.cmd.SaveCarCmd;
+import com.example.backend.dto.CarDTO;
 import jakarta.persistence.*;
 
 import java.util.HashSet;
@@ -28,6 +30,18 @@ public class Car {
     private int mileage;
     @OneToMany(mappedBy = "car", fetch = FetchType.LAZY)
     private Set<Rental> rentals;
+
+    public Car(){};
+
+    public Car(SaveCarCmd saveCarCmd){
+        this.id = saveCarCmd.getId();
+        this.licensePlate = saveCarCmd.getLicensePlate();
+        this.brand = saveCarCmd.getBrand();
+        this.model = saveCarCmd.getModel();
+        this.color = saveCarCmd.getColor();
+        this.manufacturedYear = saveCarCmd.getManufacturedYear();
+        this.mileage = saveCarCmd.getMileage();
+    }
 
     public Long getId() {
         return id;

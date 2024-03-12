@@ -10,24 +10,27 @@ import {
 } from "@mui/material";
 import { Customer } from "../interfaces/Customer"; // Ensure this import path matches your project structure
 
+const invalidIdValue = 0;
+
 interface CreateModifyCustomerDialogProps {
   open: boolean;
   onClose: () => void;
-  customer?: Customer; // Optional customer for editing
+  inputCustomer?: Customer; // Optional customer for editing
 }
 
 const CreateModifyCustomerDialog: React.FC<CreateModifyCustomerDialogProps> = ({
   open,
   onClose,
-  customer,
+  inputCustomer: inputCustomer,
 }) => {
-  const initialCustomerState: Omit<Customer, "id"> = {
+  const initialCustomerState: Customer = {
+    id: invalidIdValue,
     firstName: "",
     lastName: "",
     phoneNumber: "",
     emailAddress: "",
     licenseId: "",
-    registerDate: new Date().toISOString().slice(0, 10), // Using ISO string for simplicity, slice to get YYYY-MM-DD format
+    registerDate: new Date().toISOString().slice(0, 10),
     country: "",
     addressLine1: "",
     addressLine2: "",
@@ -37,43 +40,82 @@ const CreateModifyCustomerDialog: React.FC<CreateModifyCustomerDialogProps> = ({
   };
 
   const [customerDetails, setCustomerDetails] =
-    useState<Omit<Customer, "id">>(initialCustomerState);
+    useState<Customer>(initialCustomerState);
 
   useEffect(() => {
-    if (customer) {
+    if (inputCustomer) {
       setCustomerDetails({
-        firstName: customer.firstName,
-        lastName: customer.lastName,
-        phoneNumber: customer.phoneNumber,
-        emailAddress: customer.emailAddress,
-        licenseId: customer.licenseId,
-        registerDate: customer.registerDate,
-        country: customer.country,
-        addressLine1: customer.addressLine1,
-        addressLine2: customer.addressLine2 || "",
-        city: customer.city,
-        region: customer.region,
-        postalCode: customer.postalCode,
+        id: inputCustomer.id,
+        firstName: inputCustomer.firstName,
+        lastName: inputCustomer.lastName,
+        phoneNumber: inputCustomer.phoneNumber,
+        emailAddress: inputCustomer.emailAddress,
+        licenseId: inputCustomer.licenseId,
+        registerDate: inputCustomer.registerDate,
+        country: inputCustomer.country,
+        addressLine1: inputCustomer.addressLine1,
+        addressLine2: inputCustomer.addressLine2 || "",
+        city: inputCustomer.city,
+        region: inputCustomer.region,
+        postalCode: inputCustomer.postalCode,
       });
     } else {
       setCustomerDetails(initialCustomerState);
     }
-  }, [customer, open]);
+  }, [inputCustomer, open]);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
-    setCustomerDetails((prev) => ({ ...prev, [name]: value }));
+    setCustomerDetails((temporaryCustomer) => ({
+      ...temporaryCustomer,
+      [name]: value,
+    }));
   };
 
   const handleSubmit = () => {
-    //TODO: Call api
-    onClose();
+    const saveCustomerCmd = {
+      id: customerDetails.id == invalidIdValue ? null : customerDetails.id,
+      firstName: customerDetails.firstName,
+      lastName: customerDetails.lastName,
+      phoneNumber: customerDetails.phoneNumber,
+      emailAddress: customerDetails.emailAddress,
+      licenseId: customerDetails.licenseId,
+      registerDate: customerDetails.registerDate,
+      country: customerDetails.country,
+      addressLine1: customerDetails.addressLine1,
+      addressLine2: customerDetails.addressLine2,
+      city: customerDetails.city,
+      region: customerDetails.region,
+      postalCode: customerDetails.postalCode,
+    };
+
+    fetch("http://localhost:8080/api/customer/saveCustomer", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(saveCustomerCmd),
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Failed to save customer");
+        }
+        // Handle success response
+        console.log("Customer saved successfully");
+        // Optionally, you can update your UI or close the dialog
+        onClose();
+      })
+      .catch((error) => {
+        // Handle error
+        console.error("Error saving customer:", error);
+        // Optionally, you can show an error message to the user
+      });
   };
 
   return (
     <Dialog open={open} onClose={onClose}>
       <DialogTitle>
-        {customer ? "Edit Customer" : "Add New Customer"}
+        {inputCustomer ? "Edit Customer" : "Add New Customer"}
       </DialogTitle>
       <DialogContent>
         <TextField

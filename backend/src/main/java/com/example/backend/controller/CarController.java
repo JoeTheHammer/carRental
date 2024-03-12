@@ -1,5 +1,6 @@
 package com.example.backend.controller;
 
+import com.example.backend.cmd.SaveCarCmd;
 import com.example.backend.dto.CarDTO;
 import com.example.backend.model.Car;
 import com.example.backend.service.ICarService;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 @RestController
@@ -31,6 +33,8 @@ public class CarController {
         for (Car car : this.carService.findAll()){
             carDTOList.add(new CarDTO(car));
         }
+        // Sort by ID to ensure that list in frontend stays the same after reload.
+        carDTOList.sort(Comparator.comparingLong(CarDTO::getId));
         return carDTOList;
     }
 
@@ -44,6 +48,16 @@ public class CarController {
     @CrossOrigin(origins = "http://localhost:5173")
     public void deleteCarById(@PathVariable("id") Long id) {
         carService.delete(this.getCarFromId(id, "Car " + id + " cannot be deleted because is was not found!"));
+    }
+
+    @PostMapping("/saveCar")
+    @CrossOrigin(origins = "http://localhost:5173")
+    public void saveCar(@RequestBody SaveCarCmd saveCarCmd){
+        if (saveCarCmd == null){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Request was null!");
+        }
+        Car car = new Car(saveCarCmd);
+        this.carService.save(car);
     }
 
     private Car getCarFromId(Long id, String errorMessage){

@@ -1,5 +1,6 @@
 package com.example.backend.model;
 
+import com.example.backend.cmd.SaveCustomerCmd;
 import jakarta.persistence.*;
 
 import java.util.Date;
@@ -32,6 +33,20 @@ public class Customer {
     private Address residentialAddress;
     @OneToMany(mappedBy = "customer", fetch = FetchType.LAZY)
     private Set<Rental> rentals;
+
+
+    public Customer(){
+    }
+
+    public Customer(SaveCustomerCmd saveCustomerCmd){
+        this.id = saveCustomerCmd.getId();
+        this.firstName = saveCustomerCmd.getFirstName();
+        this.lastName = saveCustomerCmd.getLastName();
+        this.phoneNumber = saveCustomerCmd.getPhoneNumber();
+        this.licenseId = saveCustomerCmd.getLicenseId();
+        this.registerDate = saveCustomerCmd.getRegisterDate();
+        this.emailAddress = saveCustomerCmd.getEmailAddress();
+    }
 
     public Long getId() {
         return id;

@@ -1,5 +1,6 @@
 package com.example.backend.model;
 
+import com.example.backend.cmd.SaveCustomerCmd;
 import jakarta.persistence.*;
 
 import java.util.Objects;
@@ -24,6 +25,17 @@ public class Address {
     private String region;
     @Column(name = "postalCode")
     private String postalCode;
+
+    public Address(){}
+
+    public Address(SaveCustomerCmd saveCustomerCmd){
+        this.postalCode = saveCustomerCmd.getPostalCode();
+        this.region = saveCustomerCmd.getRegion();
+        this.country = saveCustomerCmd.getCountry();
+        this.city = saveCustomerCmd.getCity();
+        this.addressLine1 = saveCustomerCmd.getAddressLine1();
+        this.addressLine2 = saveCustomerCmd.getAddressLine2();
+    }
 
     public Long getId() {
         return id;

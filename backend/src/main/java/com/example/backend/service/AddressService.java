@@ -34,4 +34,15 @@ public class AddressService implements IAddressService{
     public void delete(Address address) {
         this.addressRepository.delete(address);
     }
+
+    @Override
+    public Optional<Long> findExistingAddressId(Address address) {
+        return this.addressRepository.findExistingAddressId(address.getAddressLine1(), address.getAddressLine2(),
+                address.getCity(), address.getRegion(), address.getPostalCode());
+    }
+
+    @Override
+    public void deleteAddressesNotInUse() {
+        this.addressRepository.deleteAddressesNotInUse();
+    }
 }

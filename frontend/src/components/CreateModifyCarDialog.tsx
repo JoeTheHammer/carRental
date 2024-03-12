@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Save, Cancel } from "@mui/icons-material";
+import { Save, Cancel, TenMp } from "@mui/icons-material";
 import {
   Dialog,
   DialogTitle,
@@ -10,18 +10,21 @@ import {
 } from "@mui/material";
 import { Car } from "../interfaces/Car";
 
+const invalidId = -1; // Inidicates that car has no id;
+
 interface CreateModifyCarDialogProps {
   open: boolean;
   onClose: () => void;
-  car?: Car; //optional car for editing
+  inputCar?: Car; //optional car for editing
 }
 
 const CreateModifyCarDialog: React.FC<CreateModifyCarDialogProps> = ({
   open,
   onClose,
-  car,
+  inputCar: inputCar,
 }) => {
-  const [newCar, setNewCar] = useState<Omit<Car, "id">>({
+  const [temporaryCar, setNewCar] = useState<Car>({
+    id: invalidId,
     licensePlate: "",
     brand: "",
     model: "",
@@ -31,17 +34,19 @@ const CreateModifyCarDialog: React.FC<CreateModifyCarDialogProps> = ({
   });
 
   useEffect(() => {
-    if (car) {
+    if (inputCar) {
       setNewCar({
-        licensePlate: car.licensePlate,
-        brand: car.brand,
-        model: car.model,
-        color: car.color,
-        manufacturedYear: car.manufacturedYear,
-        mileage: car.mileage,
+        id: inputCar.id,
+        licensePlate: inputCar.licensePlate,
+        brand: inputCar.brand,
+        model: inputCar.model,
+        color: inputCar.color,
+        manufacturedYear: inputCar.manufacturedYear,
+        mileage: inputCar.mileage,
       });
     } else {
       setNewCar({
+        id: invalidId,
         licensePlate: "",
         brand: "",
         model: "",
@@ -50,21 +55,52 @@ const CreateModifyCarDialog: React.FC<CreateModifyCarDialogProps> = ({
         mileage: 0,
       });
     }
-  }, [car, open]);
+  }, [inputCar, open]);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
-    setNewCar({ ...newCar, [name]: value });
+    setNewCar({ ...temporaryCar, [name]: value });
   };
 
   const handleSubmit = () => {
-    //TODO: Implement call to backend
-    onClose();
+    const saveCarCmd = {
+      id: temporaryCar.id == invalidId ? null : temporaryCar.id,
+      licensePlate: temporaryCar.licensePlate,
+      brand: temporaryCar.brand,
+      model: temporaryCar.model,
+      color: temporaryCar.color,
+      manufacturedYear: temporaryCar.manufacturedYear,
+      mileage: temporaryCar.mileage,
+    };
+
+    // Make a POST request to the API endpoint
+    fetch("http://localhost:8080/api/car/saveCar", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        // Add any other headers if needed
+      },
+      body: JSON.stringify(saveCarCmd), // Convert the saveCarCmd object to JSON string
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Failed to save car");
+        }
+        // Handle success response
+        console.log("Car saved successfully");
+        // Optionally, you can update your UI to reflect the successful save
+        onClose(); // Close the modal or form after successful save
+      })
+      .catch((error) => {
+        // Handle error
+        console.error("Error saving car:", error);
+        // Optionally, you can show an error message to the user
+      });
   };
 
   return (
     <Dialog open={open} onClose={onClose}>
-      {car ? (
+      {inputCar ? (
         <DialogTitle>Update Car</DialogTitle>
       ) : (
         <DialogTitle>Add New Car</DialogTitle>
@@ -78,7 +114,7 @@ const CreateModifyCarDialog: React.FC<CreateModifyCarDialogProps> = ({
           type="text"
           fullWidth
           variant="outlined"
-          value={newCar.licensePlate}
+          value={temporaryCar.licensePlate}
           onChange={handleChange}
         />
         <TextField
@@ -88,7 +124,7 @@ const CreateModifyCarDialog: React.FC<CreateModifyCarDialogProps> = ({
           type="text"
           fullWidth
           variant="outlined"
-          value={newCar.brand}
+          value={temporaryCar.brand}
           onChange={handleChange}
         />
         <TextField
@@ -98,7 +134,7 @@ const CreateModifyCarDialog: React.FC<CreateModifyCarDialogProps> = ({
           type="text"
           fullWidth
           variant="outlined"
-          value={newCar.model}
+          value={temporaryCar.model}
           onChange={handleChange}
         />
         <TextField
@@ -108,7 +144,7 @@ const CreateModifyCarDialog: React.FC<CreateModifyCarDialogProps> = ({
           type="text"
           fullWidth
           variant="outlined"
-          value={newCar.color}
+          value={temporaryCar.color}
           onChange={handleChange}
         />
         <TextField
@@ -118,7 +154,7 @@ const CreateModifyCarDialog: React.FC<CreateModifyCarDialogProps> = ({
           type="number"
           fullWidth
           variant="outlined"
-          value={newCar.manufacturedYear}
+          value={temporaryCar.manufacturedYear}
           onChange={handleChange}
         />
         <TextField
@@ -128,7 +164,7 @@ const CreateModifyCarDialog: React.FC<CreateModifyCarDialogProps> = ({
           type="number"
           fullWidth
           variant="outlined"
-          value={newCar.mileage}
+          value={temporaryCar.mileage}
           onChange={handleChange}
         />
       </DialogContent>

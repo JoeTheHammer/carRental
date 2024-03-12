@@ -22,13 +22,13 @@ function Cars() {
 
   const [editingCar, setEditingCar] = useState<Car | undefined>(undefined);
 
-  useEffect(() => {
-    const fetchCars = async () => {
-      const response = await fetch("http://localhost:8080/api/car/getAllCars");
-      const data = await response.json();
-      setCars(data);
-    };
+  const fetchCars = async () => {
+    const response = await fetch("http://localhost:8080/api/car/getAllCars");
+    const data = await response.json();
+    setCars(data);
+  };
 
+  useEffect(() => {
     fetchCars();
   }, []); // Effect called when page is loaded because of empty array.
 
@@ -45,6 +45,7 @@ function Cars() {
 
   const handleCloseCarDialogOpen = () => {
     setCarDialogOpen(false);
+    fetchCars();
   };
 
   const handleOpenEditDialog = (car: Car) => {
@@ -53,7 +54,24 @@ function Cars() {
   };
 
   const handleDelete = (car: Car) => {
-    //TODO: Call API to delete Car
+    if (window.confirm(`Are you sure you want to delete the car?`)) {
+      fetch(`http://localhost:8080/api/car/deleteCar/${car.id}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error("Failed to delete car");
+          }
+
+          fetchCars();
+        })
+        .catch((error) => {
+          console.error("Error deleting car:", error);
+        });
+    }
   };
 
   return (
@@ -142,7 +160,7 @@ function Cars() {
         <CreateModifyCarDialog
           open={carDialogOpen}
           onClose={handleCloseCarDialogOpen}
-          car={editingCar}
+          inputCar={editingCar}
         />
       </Box>
     </>

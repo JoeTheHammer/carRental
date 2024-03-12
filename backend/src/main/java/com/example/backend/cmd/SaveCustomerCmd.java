@@ -1,11 +1,8 @@
-package com.example.backend.dto;
-
-import com.example.backend.model.Customer;
+package com.example.backend.cmd;
 
 import java.util.Date;
 
-public class CustomerDTO {
-
+public class SaveCustomerCmd {
     private Long id;
     private String firstName;
     private String lastName;
@@ -19,25 +16,6 @@ public class CustomerDTO {
     private String city;
     private String region;
     private String postalCode;
-
-
-    public CustomerDTO(Customer customer){
-        this.id = customer.getId();
-        this.firstName = customer.getFirstName();
-        this.lastName = customer.getLastName();
-        this.phoneNumber = customer.getPhoneNumber();
-        this.emailAddress = customer.getEmailAddress();
-        this.licenseId = customer.getLicenseId();
-        this.registerDate = customer.getRegisterDate();
-        if (customer.getResidentialAddress() != null){
-            this.country = customer.getResidentialAddress().getCountry();
-            this.addressLine1 = customer.getResidentialAddress().getAddressLine1();
-            this.addressLine2 = customer.getResidentialAddress().getAddressLine2();
-            this.city = customer.getResidentialAddress().getCity();
-            this.region = customer.getResidentialAddress().getRegion();
-            this.postalCode = customer.getResidentialAddress().getPostalCode();
-        }
-    }
 
     public Long getId() {
         return id;
@@ -142,5 +120,4 @@ public class CustomerDTO {
     public void setPostalCode(String postalCode) {
         this.postalCode = postalCode;
     }
-
 }

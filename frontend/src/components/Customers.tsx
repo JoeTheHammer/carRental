@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from "react";
 import { Customer } from "../interfaces/Customer";
 import CreateModifyCustomerDialog from "./CreateModifyCustomerDialog"; // You will create this component similar to CreateModifyCarDialog
-import { Add, Edit, Delete, Cancel, Save } from "@mui/icons-material";
+import { Add, Edit, Delete } from "@mui/icons-material";
 import {
   Table,
   TableBody,
@@ -25,22 +25,24 @@ function Customers() {
     undefined
   );
 
-  useEffect(() => {
-    const fetchCustomers = async () => {
-      // Placeholder: Implement fetching of customers
-      const response = await fetch(
-        "http://localhost:8080/api/customer/getAllCustomers"
-      );
-      const data = await response.json();
-      setCustomers(data);
-    };
+  const fetchCustomers = async () => {
+    // Placeholder: Implement fetching of customers
+    const response = await fetch(
+      "http://localhost:8080/api/customer/getAllCustomers"
+    );
+    const data = await response.json();
+    setCustomers(data);
+  };
 
+  useEffect(() => {
     fetchCustomers();
   }, []);
 
   const filteredCustomers = customers.filter((customer) =>
     Object.values(customer).some((value) =>
-      value.toString().toLowerCase().includes(searchTerm.toLowerCase())
+      value !== null
+        ? value.toString().toLowerCase().includes(searchTerm.toLowerCase())
+        : false
     )
   );
 
@@ -51,6 +53,7 @@ function Customers() {
 
   const handleCloseCustomerDialog = () => {
     setCustomerDialogOpen(false);
+    fetchCustomers();
   };
 
   const handleOpenEditDialog = (customer: Customer) => {
@@ -60,7 +63,27 @@ function Customers() {
 
   // Placeholder: Implement deletion of customer
   const handleDelete = (customer: Customer) => {
-    console.log("Deleting customer:", customer);
+    if (window.confirm(`Are you sure you want to delete the customer?`)) {
+      fetch(
+        `http://localhost:8080/api/customer/deleteCustomer/${customer.id}`,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      )
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error("Failed to delete customer");
+          }
+
+          fetchCustomers();
+        })
+        .catch((error) => {
+          console.error("Error deleting customer:", error);
+        });
+    }
   };
 
   return (
@@ -111,7 +134,7 @@ function Customers() {
                   <TableCell>{customer.phoneNumber}</TableCell>
                   <TableCell>{customer.emailAddress}</TableCell>
                   <TableCell>{customer.licenseId}</TableCell>
-                  <TableCell>{new Date().toISOString().slice(0, 10)}</TableCell>
+                  <TableCell>{customer.registerDate.slice(0, 10)}</TableCell>
                   <TableCell>
                     {customer.postalCode +
                       " " +
@@ -158,7 +181,7 @@ function Customers() {
         <CreateModifyCustomerDialog
           open={customerDialogOpen}
           onClose={handleCloseCustomerDialog}
-          customer={editingCustomer}
+          inputCustomer={editingCustomer}
         />
       </Box>
     </>
