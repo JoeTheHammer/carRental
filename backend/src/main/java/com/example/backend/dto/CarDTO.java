@@ -11,6 +11,7 @@ public class CarDTO {
     private String color;
     private int manufacturedYear;
     private int mileage;
+    private boolean currentlyRented;
 
     public CarDTO(Car car){
         this.id = car.getId();
@@ -78,4 +79,11 @@ public class CarDTO {
         this.mileage = mileage;
     }
 
+    public boolean isCurrentlyRented() {
+        return currentlyRented;
+    }
+
+    public void setCurrentlyRented(boolean currentlyRented) {
+        this.currentlyRented = currentlyRented;
+    }
 }

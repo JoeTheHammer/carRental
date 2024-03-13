@@ -1,5 +1,6 @@
 package com.example.backend.model;
 
+import com.example.backend.cmd.SaveRentalCmd;
 import jakarta.persistence.*;
 
 import java.util.Date;
@@ -19,6 +20,8 @@ public class Rental {
     private Date endDate;
     @Column(name = "rented_kilometers")
     private int rentedKilometers;
+    @Column(name = "status")
+    private RentalStatus rentalStatus;
     @ManyToOne
     @JoinColumn(name = "car_id", nullable = false)
     private Car car;
@@ -28,6 +31,13 @@ public class Rental {
     @ManyToOne
     @JoinColumn(name = "billing_address_id", nullable = false)
     private Address billingAddress;
+
+    public Rental(){}
+
+    public Rental(SaveRentalCmd saveRentalCmd){
+        this.endDate = saveRentalCmd.getEndDate();
+        this.rentedKilometers = saveRentalCmd.getRentedKilometers();
+    }
 
     public Long getId() {
         return id;
@@ -83,6 +93,14 @@ public class Rental {
 
     public void setBillingAddress(Address billingAddress) {
         this.billingAddress = billingAddress;
+    }
+
+    public RentalStatus getRentalStatus() {
+        return rentalStatus;
+    }
+
+    public void setRentalStatus(RentalStatus rentalStatus) {
+        this.rentalStatus = rentalStatus;
     }
 
     @Override

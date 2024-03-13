@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Save, Cancel, TenMp } from "@mui/icons-material";
+import { Save, Cancel } from "@mui/icons-material";
 import {
   Dialog,
   DialogTitle,
@@ -31,6 +31,7 @@ const CreateModifyCarDialog: React.FC<CreateModifyCarDialogProps> = ({
     color: "",
     manufacturedYear: new Date().getFullYear(),
     mileage: 0,
+    currentlyRented: false,
   });
 
   useEffect(() => {
@@ -43,6 +44,7 @@ const CreateModifyCarDialog: React.FC<CreateModifyCarDialogProps> = ({
         color: inputCar.color,
         manufacturedYear: inputCar.manufacturedYear,
         mileage: inputCar.mileage,
+        currentlyRented: inputCar.currentlyRented,
       });
     } else {
       setNewCar({
@@ -53,6 +55,7 @@ const CreateModifyCarDialog: React.FC<CreateModifyCarDialogProps> = ({
         color: "",
         manufacturedYear: new Date().getFullYear(),
         mileage: 0,
+        currentlyRented: false,
       });
     }
   }, [inputCar, open]);
@@ -73,12 +76,10 @@ const CreateModifyCarDialog: React.FC<CreateModifyCarDialogProps> = ({
       mileage: temporaryCar.mileage,
     };
 
-    // Make a POST request to the API endpoint
     fetch("http://localhost:8080/api/car/saveCar", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        // Add any other headers if needed
       },
       body: JSON.stringify(saveCarCmd), // Convert the saveCarCmd object to JSON string
     })
@@ -86,15 +87,11 @@ const CreateModifyCarDialog: React.FC<CreateModifyCarDialogProps> = ({
         if (!response.ok) {
           throw new Error("Failed to save car");
         }
-        // Handle success response
         console.log("Car saved successfully");
-        // Optionally, you can update your UI to reflect the successful save
-        onClose(); // Close the modal or form after successful save
+        onClose();
       })
       .catch((error) => {
-        // Handle error
         console.error("Error saving car:", error);
-        // Optionally, you can show an error message to the user
       });
   };
 

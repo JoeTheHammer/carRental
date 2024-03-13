@@ -35,4 +35,9 @@ public class CarService implements ICarService {
     public void delete(Car car) {
         this.carRepository.delete(car);
     }
+
+    @Override
+    public Optional<Long> checkIfCarIsRentedById(Long carId) {
+        return this.carRepository.checkIfCarIsRentedById(carId);
+    }
 }

@@ -37,6 +37,7 @@ const CreateModifyCustomerDialog: React.FC<CreateModifyCustomerDialogProps> = ({
     city: "",
     region: "",
     postalCode: "",
+    dateOfBirth: "",
   };
 
   const [customerDetails, setCustomerDetails] =
@@ -51,13 +52,14 @@ const CreateModifyCustomerDialog: React.FC<CreateModifyCustomerDialogProps> = ({
         phoneNumber: inputCustomer.phoneNumber,
         emailAddress: inputCustomer.emailAddress,
         licenseId: inputCustomer.licenseId,
-        registerDate: inputCustomer.registerDate,
+        registerDate: inputCustomer.registerDate.slice(0, 10),
         country: inputCustomer.country,
         addressLine1: inputCustomer.addressLine1,
         addressLine2: inputCustomer.addressLine2 || "",
         city: inputCustomer.city,
         region: inputCustomer.region,
         postalCode: inputCustomer.postalCode,
+        dateOfBirth: inputCustomer.dateOfBirth.slice(0, 10),
       });
     } else {
       setCustomerDetails(initialCustomerState);
@@ -87,6 +89,7 @@ const CreateModifyCustomerDialog: React.FC<CreateModifyCustomerDialogProps> = ({
       city: customerDetails.city,
       region: customerDetails.region,
       postalCode: customerDetails.postalCode,
+      dateOfBirth: customerDetails.dateOfBirth,
     };
 
     fetch("http://localhost:8080/api/customer/saveCustomer", {
@@ -167,6 +170,17 @@ const CreateModifyCustomerDialog: React.FC<CreateModifyCustomerDialogProps> = ({
           fullWidth
           variant="outlined"
           value={customerDetails.licenseId}
+          onChange={handleChange}
+        />
+        <TextField
+          margin="dense"
+          name="dateOfBirth"
+          label="Date of birth"
+          type="date"
+          fullWidth
+          variant="outlined"
+          InputLabelProps={{ shrink: true }}
+          value={customerDetails.dateOfBirth}
           onChange={handleChange}
         />
         <TextField

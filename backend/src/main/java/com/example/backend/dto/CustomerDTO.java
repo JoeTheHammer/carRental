@@ -19,6 +19,7 @@ public class CustomerDTO {
     private String city;
     private String region;
     private String postalCode;
+    private Date dateOfBirth;
 
 
     public CustomerDTO(Customer customer){
@@ -29,6 +30,7 @@ public class CustomerDTO {
         this.emailAddress = customer.getEmailAddress();
         this.licenseId = customer.getLicenseId();
         this.registerDate = customer.getRegisterDate();
+        this.dateOfBirth = customer.getDateOfBirth();
         if (customer.getResidentialAddress() != null){
             this.country = customer.getResidentialAddress().getCountry();
             this.addressLine1 = customer.getResidentialAddress().getAddressLine1();
@@ -143,4 +145,11 @@ public class CustomerDTO {
         this.postalCode = postalCode;
     }
 
+    public Date getDateOfBirth() {
+        return dateOfBirth;
+    }
+
+    public void setDateOfBirth(Date dateOfBirth) {
+        this.dateOfBirth = dateOfBirth;
+    }
 }

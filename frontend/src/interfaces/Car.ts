@@ -6,4 +6,5 @@ export interface Car {
   color: string;
   manufacturedYear: number;
   mileage: number;
+  currentlyRented: boolean;
 }

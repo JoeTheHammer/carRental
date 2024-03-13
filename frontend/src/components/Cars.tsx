@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Car } from "../interfaces/Car";
 import CreateModifyCarDialog from "./CreateModifyCarDialog";
-import { Add, Edit, Delete } from "@mui/icons-material";
+import { Add, Edit, Delete, Close, Check } from "@mui/icons-material";
 import {
   Table,
   TableBody,
@@ -19,7 +19,6 @@ function Cars() {
   const [cars, setCars] = useState<Car[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [carDialogOpen, setCarDialogOpen] = useState<boolean>(false);
-
   const [editingCar, setEditingCar] = useState<Car | undefined>(undefined);
 
   const fetchCars = async () => {
@@ -38,12 +37,12 @@ function Cars() {
     )
   );
 
-  const handleOpenCreateDialog = () => {
+  const handleOpenCarDialog = () => {
     setEditingCar(undefined);
     setCarDialogOpen(true);
   };
 
-  const handleCloseCarDialogOpen = () => {
+  const handleCloseCarDialog = () => {
     setCarDialogOpen(false);
     fetchCars();
   };
@@ -93,35 +92,41 @@ function Cars() {
           >
             <TableHead>
               <TableRow>
-                <TableCell>
+                <TableCell align="center">
                   <b>License Plate</b>
                 </TableCell>
-                <TableCell>
+                <TableCell align="center">
                   <b>Brand</b>
                 </TableCell>
-                <TableCell>
+                <TableCell align="center">
                   <b>Model</b>
                 </TableCell>
-                <TableCell>
+                <TableCell align="center">
                   <b>Color</b>
                 </TableCell>
-                <TableCell>
+                <TableCell align="center">
                   <b>Manufactured Year</b>
                 </TableCell>
-                <TableCell>
+                <TableCell align="center">
                   <b>Mileage (km)</b>
+                </TableCell>
+                <TableCell align="center">
+                  <b>Available</b>
                 </TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {filteredCars.map((car) => (
                 <TableRow key={car.id}>
-                  <TableCell>{car.licensePlate}</TableCell>
-                  <TableCell>{car.brand}</TableCell>
-                  <TableCell>{car.model}</TableCell>
-                  <TableCell>{car.color}</TableCell>
-                  <TableCell>{car.manufacturedYear}</TableCell>
-                  <TableCell>{car.mileage}</TableCell>
+                  <TableCell align="center">{car.licensePlate}</TableCell>
+                  <TableCell align="center">{car.brand}</TableCell>
+                  <TableCell align="center">{car.model}</TableCell>
+                  <TableCell align="center">{car.color}</TableCell>
+                  <TableCell align="center">{car.manufacturedYear}</TableCell>
+                  <TableCell align="center">{car.mileage}</TableCell>
+                  <TableCell align="center">
+                    {car.currentlyRented ? <Close /> : <Check />}
+                  </TableCell>
                   <TableCell align="left">
                     <Button
                       variant="outlined"
@@ -149,7 +154,7 @@ function Cars() {
         </TableContainer>
         <Box sx={{ pt: "10px", width: "100%" }}>
           <Button
-            onClick={handleOpenCreateDialog}
+            onClick={handleOpenCarDialog}
             variant="contained"
             color="primary"
             startIcon={<Add></Add>}
@@ -159,7 +164,7 @@ function Cars() {
         </Box>
         <CreateModifyCarDialog
           open={carDialogOpen}
-          onClose={handleCloseCarDialogOpen}
+          onClose={handleCloseCarDialog}
           inputCar={editingCar}
         />
       </Box>

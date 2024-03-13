@@ -1,5 +1,3 @@
-// interfaces/Customer.ts
-
 export interface Customer {
   id: number;
   firstName: string;
@@ -14,4 +12,5 @@ export interface Customer {
   city: string;
   region: string;
   postalCode: string;
+  dateOfBirth: string;
 }

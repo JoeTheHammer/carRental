@@ -31,11 +31,19 @@ public class CarController {
     public List<CarDTO> getAllCars(){
         List<CarDTO> carDTOList = new ArrayList<>();
         for (Car car : this.carService.findAll()){
-            carDTOList.add(new CarDTO(car));
+            CarDTO carDTO = new CarDTO(car);
+            carDTO.setCurrentlyRented(this.carService.checkIfCarIsRentedById(car.getId()).isPresent());
+            carDTOList.add(carDTO);
         }
         // Sort by ID to ensure that list in frontend stays the same after reload.
         carDTOList.sort(Comparator.comparingLong(CarDTO::getId));
         return carDTOList;
+    }
+
+    @GetMapping(value = "/getAvailableCars", produces = MediaType.APPLICATION_JSON_VALUE)
+    @CrossOrigin(origins = "http://localhost:5173")
+    public List<CarDTO> getAvailableCars(){
+        return getAllCars().stream().filter(carDTO -> !carDTO.isCurrentlyRented()).toList();
     }
 
     @GetMapping(value = "/getCar/{id}", produces = MediaType.APPLICATION_JSON_VALUE)

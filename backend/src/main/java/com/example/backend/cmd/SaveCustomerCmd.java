@@ -16,6 +16,7 @@ public class SaveCustomerCmd {
     private String city;
     private String region;
     private String postalCode;
+    private Date dateOfBirth;
 
     public Long getId() {
         return id;
@@ -119,5 +120,13 @@ public class SaveCustomerCmd {
 
     public void setPostalCode(String postalCode) {
         this.postalCode = postalCode;
+    }
+
+    public Date getDateOfBirth() {
+        return dateOfBirth;
+    }
+
+    public void setDateOfBirth(Date dateOfBirth) {
+        this.dateOfBirth = dateOfBirth;
     }
 }

@@ -3,7 +3,8 @@
 import React, { useEffect, useState } from "react";
 import { Customer } from "../interfaces/Customer";
 import CreateModifyCustomerDialog from "./CreateModifyCustomerDialog"; // You will create this component similar to CreateModifyCarDialog
-import { Add, Edit, Delete } from "@mui/icons-material";
+import { Add, Edit, Delete, CarRental } from "@mui/icons-material";
+import { Snackbar } from "@mui/material";
 import {
   Table,
   TableBody,
@@ -16,6 +17,7 @@ import {
   Box,
   Button,
 } from "@mui/material";
+import RentCarDialog from "./RentCarDialog";
 
 function Customers() {
   const [customers, setCustomers] = useState<Customer[]>([]);
@@ -24,6 +26,15 @@ function Customers() {
   const [editingCustomer, setEditingCustomer] = useState<Customer | undefined>(
     undefined
   );
+  const [rentCarDialogOpen, setRentCarDialogOpen] = useState<boolean>(false);
+  const [customerForRent, setCustomerForRent] = useState<Customer | undefined>(
+    undefined
+  );
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+
+  const handleRentalSaveSuccess = () => {
+    setSnackbarOpen(true);
+  };
 
   const fetchCustomers = async () => {
     // Placeholder: Implement fetching of customers
@@ -61,6 +72,15 @@ function Customers() {
     setCustomerDialogOpen(true);
   };
 
+  const handleOpenRentCarDialog = (customer: Customer) => {
+    setCustomerForRent(customer);
+    setRentCarDialogOpen(true);
+  };
+
+  const handleCloseRentCarDialog = () => {
+    setRentCarDialogOpen(false);
+  };
+
   // Placeholder: Implement deletion of customer
   const handleDelete = (customer: Customer) => {
     if (window.confirm(`Are you sure you want to delete the customer?`)) {
@@ -88,6 +108,12 @@ function Customers() {
 
   return (
     <>
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={6000} // Hide after 6 seconds
+        onClose={() => setSnackbarOpen(false)} // Close when the user clicks away or after the timeout
+        message="Rental was added!" // The message to display
+      />
       <Box sx={{ pr: 2, pl: 2, pt: 10, pb: 2, width: "100%" }}>
         <TextField
           label="Search Customers"
@@ -119,6 +145,9 @@ function Customers() {
                   <b>License ID</b>
                 </TableCell>
                 <TableCell>
+                  <b>Date of birth</b>
+                </TableCell>
+                <TableCell>
                   <b>Register Date</b>
                 </TableCell>
                 <TableCell>
@@ -134,6 +163,7 @@ function Customers() {
                   <TableCell>{customer.phoneNumber}</TableCell>
                   <TableCell>{customer.emailAddress}</TableCell>
                   <TableCell>{customer.licenseId}</TableCell>
+                  <TableCell>{customer.dateOfBirth.slice(0, 10)}</TableCell>
                   <TableCell>{customer.registerDate.slice(0, 10)}</TableCell>
                   <TableCell>
                     {customer.postalCode +
@@ -142,7 +172,16 @@ function Customers() {
                       ", " +
                       customer.country}
                   </TableCell>
-                  {/* Additional fields */}
+                  <TableCell align="left">
+                    <Button
+                      variant="outlined"
+                      color="primary"
+                      startIcon={<CarRental />}
+                      onClick={() => handleOpenRentCarDialog(customer)}
+                    >
+                      Rent Car
+                    </Button>
+                  </TableCell>
                   <TableCell align="left">
                     <Button
                       variant="outlined"
@@ -183,6 +222,14 @@ function Customers() {
           onClose={handleCloseCustomerDialog}
           inputCustomer={editingCustomer}
         />
+        {customerForRent && (
+          <RentCarDialog
+            open={rentCarDialogOpen}
+            onClose={handleCloseRentCarDialog}
+            givenCustomer={customerForRent}
+            onRentalSuccess={handleRentalSaveSuccess}
+          />
+        )}
       </Box>
     </>
   );

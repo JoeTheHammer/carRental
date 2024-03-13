@@ -1,6 +1,7 @@
 package com.example.backend.model;
 
 import com.example.backend.cmd.SaveCustomerCmd;
+import com.example.backend.cmd.SaveRentalCmd;
 import jakarta.persistence.*;
 
 import java.util.Objects;
@@ -35,6 +36,15 @@ public class Address {
         this.city = saveCustomerCmd.getCity();
         this.addressLine1 = saveCustomerCmd.getAddressLine1();
         this.addressLine2 = saveCustomerCmd.getAddressLine2();
+    }
+
+    public Address(SaveRentalCmd saveRentalCmd){
+        this.postalCode = saveRentalCmd.getPostalCode();
+        this.region = saveRentalCmd.getRegion();
+        this.country = saveRentalCmd.getCountry();
+        this.city = saveRentalCmd.getCity();
+        this.addressLine1 = saveRentalCmd.getAddressLine1();
+        this.addressLine2 = saveRentalCmd.getAddressLine2();
     }
 
     public Long getId() {

@@ -34,6 +34,9 @@ public class Customer {
     @OneToMany(mappedBy = "customer", fetch = FetchType.LAZY)
     private Set<Rental> rentals;
 
+    @Column(name = "date_of_birth")
+    private Date dateOfBirth;
+
 
     public Customer(){
     }
@@ -46,6 +49,7 @@ public class Customer {
         this.licenseId = saveCustomerCmd.getLicenseId();
         this.registerDate = saveCustomerCmd.getRegisterDate();
         this.emailAddress = saveCustomerCmd.getEmailAddress();
+        this.dateOfBirth = saveCustomerCmd.getDateOfBirth();
     }
 
     public Long getId() {
@@ -121,6 +125,14 @@ public class Customer {
             this.rentals = new HashSet<>();
         }
         this.rentals.add(rental);
+    }
+
+    public Date getDateOfBirth() {
+        return dateOfBirth;
+    }
+
+    public void setDateOfBirth(Date dateOfBirth) {
+        this.dateOfBirth = dateOfBirth;
     }
 
     @Override

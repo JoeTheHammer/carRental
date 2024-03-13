@@ -12,4 +12,6 @@ public interface ICarService {
     Optional<Car> findById(Long id);
     Car save(Car car);
     void delete(Car car);
+
+    Optional<Long> checkIfCarIsRentedById(Long carId);
 }
