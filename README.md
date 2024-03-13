@@ -1,4 +1,4 @@
-# Car Rent
+# Car Rental
 
 This a simple application for car renting.
 
