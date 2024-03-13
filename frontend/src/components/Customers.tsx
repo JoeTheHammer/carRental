@@ -1,6 +1,6 @@
 // Customers.tsx
 
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Customer } from "../interfaces/Customer";
 import CreateModifyCustomerDialog from "./CreateModifyCustomerDialog"; // You will create this component similar to CreateModifyCarDialog
 import { Add, Edit, Delete, CarRental } from "@mui/icons-material";
@@ -110,9 +110,9 @@ function Customers() {
     <>
       <Snackbar
         open={snackbarOpen}
-        autoHideDuration={6000} // Hide after 6 seconds
-        onClose={() => setSnackbarOpen(false)} // Close when the user clicks away or after the timeout
-        message="Rental was added!" // The message to display
+        autoHideDuration={6000}
+        onClose={() => setSnackbarOpen(false)}
+        message="Rental was added!"
       />
       <Box sx={{ pr: 2, pl: 2, pt: 10, pb: 2, width: "100%" }}>
         <TextField

@@ -11,7 +11,7 @@ import {
   Checkbox,
   FormControlLabel,
 } from "@mui/material";
-import { Save, Cancel, RecentActorsOutlined } from "@mui/icons-material";
+import { Save, Cancel } from "@mui/icons-material";
 import { Customer } from "../interfaces/Customer";
 import { Car } from "../interfaces/Car";
 import { Rental } from "../interfaces/Rental";

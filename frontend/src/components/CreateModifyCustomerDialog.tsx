@@ -103,15 +103,11 @@ const CreateModifyCustomerDialog: React.FC<CreateModifyCustomerDialogProps> = ({
         if (!response.ok) {
           throw new Error("Failed to save customer");
         }
-        // Handle success response
         console.log("Customer saved successfully");
-        // Optionally, you can update your UI or close the dialog
         onClose();
       })
       .catch((error) => {
-        // Handle error
         console.error("Error saving customer:", error);
-        // Optionally, you can show an error message to the user
       });
   };
 

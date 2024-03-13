@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Car } from "../interfaces/Car";
 import CreateModifyCarDialog from "./CreateModifyCarDialog";
 import { Add, Edit, Delete, Close, Check } from "@mui/icons-material";

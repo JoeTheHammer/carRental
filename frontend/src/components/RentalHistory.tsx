@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Rental } from "../interfaces/Rental";
 import {
   Table,
@@ -11,7 +11,6 @@ import {
   TextField,
   Box,
   Typography,
-  Button,
 } from "@mui/material";
 
 function RentalHistory() {

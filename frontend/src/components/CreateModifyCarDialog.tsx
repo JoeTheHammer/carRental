@@ -81,7 +81,7 @@ const CreateModifyCarDialog: React.FC<CreateModifyCarDialogProps> = ({
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(saveCarCmd), // Convert the saveCarCmd object to JSON string
+      body: JSON.stringify(saveCarCmd),
     })
       .then((response) => {
         if (!response.ok) {
