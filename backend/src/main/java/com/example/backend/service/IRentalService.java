@@ -9,4 +9,6 @@ public interface IRentalService {
     Optional<Rental> findById(Long id);
     Rental save(Rental rental);
     void delete(Rental rental);
+    Iterable<Rental> findActiveRentals();
+    Iterable<Rental> findRentalHistory();
 }

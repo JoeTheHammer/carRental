@@ -128,7 +128,9 @@ const RentCarDialog: React.FC<RentCarDialogProps> = ({
         <Box sx={{ mt: 1 }}>
           <Autocomplete
             options={cars}
-            getOptionLabel={(option) => option.licensePlate}
+            getOptionLabel={(option) =>
+              option.licensePlate + ": " + option.brand + " " + option.model
+            }
             onChange={(event, value) =>
               setSelectedCarId(value?.id || undefined)
             }

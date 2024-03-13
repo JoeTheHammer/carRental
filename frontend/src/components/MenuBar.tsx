@@ -11,7 +11,7 @@ import MenuItem from "@mui/material/MenuItem";
 import { CarRental } from "@mui/icons-material";
 import { Link } from "react-router-dom";
 
-const pages = ["Cars", "Customers", "Rentals"];
+const pages = ["Customers", "Cars", "Rentals", "RentalHistory"];
 
 function MenuBar() {
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(

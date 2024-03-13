@@ -13,4 +13,8 @@ export interface Rental {
   region: string;
   postalCode: string;
   twoAddresses: boolean;
+  customerName: string;
+  licensePlate: string;
+  carInformation: string;
+  billingAddress: string;
 }

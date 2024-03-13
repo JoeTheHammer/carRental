@@ -13,15 +13,14 @@ import {
   Typography,
   Button,
 } from "@mui/material";
-import { Garage } from "@mui/icons-material";
 
-function Rentals() {
+function RentalHistory() {
   const [rentals, setRentals] = useState<Rental[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
 
   const fetchRentals = async () => {
     const response = await fetch(
-      "http://localhost:8080/api/rental/getActiveRentals"
+      "http://localhost:8080/api/rental/getRentalHistory"
     );
     const data = await response.json();
     setRentals(data);
@@ -37,31 +36,6 @@ function Rentals() {
       rental.carInformation.toLowerCase().includes(searchTerm.toLowerCase()) ||
       rental.customerName.toLowerCase().includes(searchTerm.toLowerCase())
   );
-
-  const handleCloseRental = (rental: Rental) => {
-    if (
-      window.confirm(
-        `Are you sure you want to return the car and close the rental?`
-      )
-    ) {
-      fetch(`http://localhost:8080/api/rental/closeRental/${rental.id}`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      })
-        .then((response) => {
-          if (!response.ok) {
-            throw new Error("Failed to delete customer");
-          }
-
-          fetchRentals();
-        })
-        .catch((error) => {
-          console.error("Error deleting customer:", error);
-        });
-    }
-  };
 
   return (
     <>
@@ -111,27 +85,17 @@ function Rentals() {
                   <TableCell>{rental.endDate.slice(0, 10)}</TableCell>
                   <TableCell>{rental.rentedKilometers}</TableCell>
                   <TableCell>{rental.billingAddress}</TableCell>
-                  <TableCell align="left">
-                    <Button
-                      variant="outlined"
-                      color="primary"
-                      startIcon={<Garage />}
-                      onClick={() => handleCloseRental(rental)}
-                    >
-                      Return Car
-                    </Button>
-                  </TableCell>
                 </TableRow>
               ))}
             </TableBody>
           </Table>
         </TableContainer>
         <Typography variant="subtitle1" sx={{ pt: 2 }}>
-          {rentals.length} cars are rented at the moment.
+          {rentals.length} closed rentals are in the system.
         </Typography>
       </Box>
     </>
   );
 }
 
-export default Rentals;
+export default RentalHistory;

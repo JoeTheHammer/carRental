@@ -11,6 +11,7 @@ import Cars from "./components/Cars";
 import Customers from "./components/Customers";
 import Rentals from "./components/Rentals";
 import { CssBaseline } from "@mui/material";
+import RentalHistory from "./components/RentalHistory";
 
 const theme = createTheme({
   palette: {
@@ -33,6 +34,7 @@ function App() {
               <Route path="/cars" element={<Cars />} />
               <Route path="/customers" element={<Customers />} />
               <Route path="/rentals" element={<Rentals />} />
+              <Route path="/rentalHistory" element={<RentalHistory />} />
             </Routes>
           </Router>
         </CssBaseline>

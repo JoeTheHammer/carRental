@@ -34,4 +34,14 @@ public class RentalService implements IRentalService{
     public void delete(Rental rental) {
         this.rentalRepository.delete(rental);
     }
+
+    @Override
+    public Iterable<Rental> findActiveRentals() {
+        return this.rentalRepository.findActiveRentals();
+    }
+
+    @Override
+    public Iterable<Rental> findRentalHistory() {
+        return this.rentalRepository.findRentalHistory();
+    }
 }
